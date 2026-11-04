@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Тренажёр: Сложение и вычитание дробей. Смешанные числа — 6 класс</title>
+<style>
+*{box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
+body{margin:0;background:#f4f9fb;color:#222;min-height:100vh;display:flex;flex-direction:column;align-items:center}
+.wrap{width:100%;max-width:760px;padding:18px}
+.card{background:#fff;border:1.5px solid #8FD2EC;border-radius:14px;padding:22px;box-shadow:0 2px 8px rgba(0,173,227,.08)}
+h1{color:#00ADE3;font-size:24px;margin:0 0 6px}
+.brand{font-size:13px;color:#989898;margin-bottom:14px}
+.tasknum{font-size:14px;color:#989898;margin-bottom:8px}
+.qtext{font-size:19px;margin-bottom:16px;line-height:1.6}
+.btn{background:#00ADE3;color:#fff;border:none;border-radius:10px;padding:12px 26px;font-size:17px;cursor:pointer}
+.btn:hover{background:#0095c4}
+.btn-ghost{background:#fff;color:#00ADE3;border:1.5px solid #00ADE3;border-radius:10px;padding:9px 16px;font-size:14px;cursor:pointer}
+.cell{font-size:19px;padding:6px 4px;border:1.5px solid #8FD2EC;border-radius:8px;width:64px;text-align:center}
+.cell.wide{width:56px}
+input.err{border-color:#e53935;background:#ffebee}
+input.ok{border-color:#43a047;background:#e8f5e9}
+.ansrow{display:flex;align-items:center;gap:10px;margin-top:6px;flex-wrap:wrap}
+.frin{display:inline-flex;flex-direction:column;gap:4px;align-items:center}
+.fbar{height:2.2px;background:#222;width:100%;border-radius:2px}
+.feedback{margin-top:10px;font-size:15px;min-height:22px}
+.feedback.bad{color:#e53935}
+.feedback.good{color:#43a047}
+.variants{display:flex;flex-direction:column;gap:10px;margin-top:8px}
+.var-btn{background:#fff;border:1.5px solid #8FD2EC;border-radius:10px;padding:12px 20px;font-size:16.5px;cursor:pointer;text-align:left}
+.var-btn.sel-err{border-color:#e53935;background:#ffebee}
+.var-btn.sel-ok{border-color:#43a047;background:#e8f5e9}
+.algbox{display:none;background:#f0fafd;border-left:4px solid #00ADE3;border-radius:0 10px 10px 0;padding:12px 16px;margin:12px 0;font-size:15px;line-height:1.6}
+.algbox ol{margin:6px 0;padding-left:20px}
+.term{color:#1B7A3D;font-weight:700}
+.progress{height:8px;background:#e3f3fa;border-radius:4px;margin-bottom:16px;overflow:hidden}
+.progress>div{height:100%;background:#00ADE3;transition:width .3s}
+.center{text-align:center}
+.sol{display:none;margin-top:14px;background:#fafafa;border:1px dashed #8FD2EC;border-radius:10px;padding:12px 16px;font-size:14.5px;line-height:1.6}
+.big{font-size:44px;font-weight:700;color:#00ADE3;margin:10px 0}
+.fr{display:inline-flex;flex-direction:column;text-align:center;vertical-align:middle;margin:0 2px;line-height:1.12}
+.fr .fn{border-bottom:1.6px solid #222;padding:0 4px}
+.fr .fd{padding:0 4px}
+</style>
+<base target="_blank">
+</head>
+<body>
+<div class="wrap">
+
+<!-- ЗАСТАВКА -->
+<div id="screen-start" class="card center">
+  <h1>Сложение и вычитание дробей.<br>Смешанные числа</h1>
+  <div class="brand">Математика · 6 класс · Мерзляк, § 10–12 · Тренажёр Елены Шерездановой</div>
+  <div id="coverSvg" style="margin:8px 0"></div>
+  <p style="font-size:16px;line-height:1.5">14 заданий: дроби, смешанные числа, цепочки и 2 задачи.<br>
+  Ответ вписывай в ячейки — как в тетради. Ответ — несократимой дробью.<br>
+  Решения откроются только после всех заданий.</p>
+  <button class="btn" onclick="start()">Начать</button>
+  <div class="brand" style="margin-top:14px">© Елена Шерезданова · Математика 5–11 класс</div>
+</div>
+
+<!-- ЗАДАНИЕ -->
+<div id="screen-task" class="card" style="display:none">
+  <div class="progress"><div id="bar" style="width:0%"></div></div>
+  <div class="tasknum" id="tnum"></div>
+  <div id="tbody"></div>
+  <button class="btn-ghost" onclick="toggleAlg()">Алгоритм / Как решать</button>
+  <div class="algbox" id="algbox">
+    <b>Алгоритм сложения и вычитания дробей с разными знаменателями:</b>
+    <ol>
+      <li>Найди <span class="term">НОЗ</span>: один знаменатель делится на другой → берём больший; знаменатели взаимно простые → перемножаем; иначе ищем <span class="term">НОК</span>.</li>
+      <li>Найди <span class="term">дополнительный множитель</span>: НОЗ : знаменатель.</li>
+      <li>Умножь числители на множители, сложи/вычти их. Знаменатель <b>не меняй</b>.</li>
+      <li><span class="term">Сократи</span>; если дробь неправильная — <span class="term">выдели целую часть</span>.</li>
+    </ol>
+    <b>Смешанные числа:</b> целые части отдельно, дробные отдельно. Дробная часть уменьшаемого меньше — <span class="term">занимаем единицу</span>. Из натурального числа: 5 = 4 12/12.
+    <div id="taskhint" style="margin-top:8px"></div>
+  </div>
+  <div class="brand" style="margin-top:14px">© Елена Шерезданова · Математика 5–11 класс</div>
+</div>
+
+<!-- РЕЗУЛЬТАТ -->
+<div id="screen-result" class="card" style="display:none">
+  <div class="center">
+    <h1>Результат</h1>
+    <div style="text-align:center"><img src="data:image/png;base64,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" alt="" style="max-width:180px"></div>
+    <div class="big" id="score"></div>
+    <div id="verdict" style="font-size:17px;margin:6px 0 12px"></div>
+  </div>
+  <div id="mistakes"></div>
+  <div class="center" style="margin:14px 0">
+    <button class="btn-ghost" onclick="toggleSol()" id="solbtn">Показать решения и ответы</button>
+  </div>
+  <div class="sol" id="solutions"></div>
+  <div class="center"><button class="btn" onclick="location.reload()">Пройти заново</button></div>
+  <div class="brand center" style="margin-top:14px">© Елена Шерезданова · Математика 5–11 класс</div>
+</div>
+
+</div>
+
+<canvas id="fwcanvas" style="position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:50;display:none"></canvas>
+
+<script>
+/* ===== ДРОБИ (HTML-рендер) ===== */
+function F(n,d){return `<span class="fr"><span class="fn">${n}</span><span class="fd">${d}</span></span>`;}
+
+/* ===== ЗАСТАВКА: круги-дроби ===== */
+function pie(parts,shaded,R){
+  R=R||42; const cx=R+6, cy=R+6; let s=`<svg viewBox="0 0 ${2*R+12} ${2*R+12}" width="${2*R+12}">`;
+  for(let i=0;i<parts;i++){
+    const a0=-Math.PI/2+i*2*Math.PI/parts, a1=-Math.PI/2+(i+1)*2*Math.PI/parts;
+    const x0=cx+R*Math.cos(a0), y0=cy+R*Math.sin(a0), x1=cx+R*Math.cos(a1), y1=cy+R*Math.sin(a1);
+    s+=`<path d="M ${cx} ${cy} L ${x0.toFixed(1)} ${y0.toFixed(1)} A ${R} ${R} 0 0 1 ${x1.toFixed(1)} ${y1.toFixed(1)} Z" fill="${i<shaded?'#00ADE3':'#e8f6fc'}" stroke="#fff" stroke-width="2"/>`;
+  }
+  s+=`<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="#8FD2EC" stroke-width="2.5"/></svg>`;
+  return s;
+}
+document.getElementById('coverSvg').innerHTML =
+  `<div style="display:flex;justify-content:center;gap:26px;align-items:flex-end">`+
+  `<div>${pie(2,1)}<div style="text-align:center;font-weight:700;color:#1B7A3D">1/2</div></div>`+
+  `<div>${pie(4,3,50)}<div style="text-align:center;font-weight:700;color:#1B7A3D">3/4</div></div>`+
+  `<div>${pie(3,2)}<div style="text-align:center;font-weight:700;color:#1B7A3D">2/3</div></div>`+
+  `</div>`;
+
+/* ================== ЗАДАНИЯ ================== */
+const TASKS=[
+ {q:()=>F(3,4)+' + '+F(5,6)+' = ?',mode:"frac",ans:[19,12,0],hint:"Случай 1: 12 делится на 4 и на 6 → НОЗ = 12. Дробь получится неправильной — в этом задании ответ дробью, так и пиши.",sol:()=>F(3,4)+' + '+F(5,6)+' = '+F(9,12)+' + '+F(10,12)+' = <b>'+F(19,12)+'</b>'},
+ {q:()=>F(7,9)+' − '+F(5,12)+' = ?',mode:"frac",ans:[13,36,0],hint:"Случай 3: НОЗ = НОК(9; 12) = 36.",sol:()=>F(7,9)+' − '+F(5,12)+' = '+F(28,36)+' − '+F(15,36)+' = <b>'+F(13,36)+'</b>'},
+ {q:()=>F(7,10)+' + '+F(4,15)+' = ?',mode:"frac",ans:[29,30,0],hint:"НОЗ = НОК(10; 15) = 30.",sol:()=>F(7,10)+' + '+F(4,15)+' = '+F(21,30)+' + '+F(8,30)+' = <b>'+F(29,30)+'</b>'},
+ {q:()=>F(9,14)+' − '+F(3,7)+' = ?',mode:"frac",ans:[3,14,0],hint:"Случай 1: 14 делится на 7 → НОЗ = 14.",sol:()=>F(9,14)+' − '+F(6,14)+' = <b>'+F(3,14)+'</b>'},
+ {q:()=>'2 '+F(3,8)+' + 3 '+F(5,12)+' = ?',mode:"mixed",ans:[23,24,5],hint:"Целые части отдельно, дробные отдельно. НОЗ дробных частей = 24.",sol:()=>'(2 + 3) + ('+F(9,24)+' + '+F(10,24)+') = <b>5 '+F(23,24)+'</b>'},
+ {q:()=>'3 '+F(5,6)+' + 2 '+F(7,9)+' = ?',mode:"mixed",ans:[11,18,6],hint:"НОЗ = 18. Дробная часть получится неправильной — выдели из неё единицу!",sol:()=>'5 + ('+F(15,18)+' + '+F(14,18)+') = 5 '+F(29,18)+' = <b>6 '+F(11,18)+'</b>'},
+ {q:()=>'4 '+F(7,8)+' + 1 '+F(5,6)+' = ?',mode:"mixed",ans:[17,24,6],hint:"НОЗ = 24. Следи за целой частью!",sol:()=>'5 + ('+F(21,24)+' + '+F(20,24)+') = 5 '+F(41,24)+' = <b>6 '+F(17,24)+'</b>'},
+ {q:()=>'6 '+F(5,8)+' − 2 '+F(1,6)+' = ?',mode:"mixed",ans:[11,24,4],hint:"НОЗ = 24. Сначала сравни дробные части — здесь занимать единицу не нужно.",sol:()=>'(6 − 2) + ('+F(15,24)+' − '+F(4,24)+') = <b>4 '+F(11,24)+'</b>'},
+ {q:()=>'7 '+F(2,9)+' − 3 '+F(5,6)+' = ?',mode:"mixed",ans:[7,18,3],hint:"НОЗ = 18. 4/18 &lt; 15/18 — занимаем единицу из целой части!",sol:()=>'7 '+F(4,18)+' − 3 '+F(15,18)+' = 6 '+F(22,18)+' − 3 '+F(15,18)+' = <b>3 '+F(7,18)+'</b>'},
+ {q:()=>'5 − 2 '+F(7,12)+' = ?',mode:"mixed",ans:[5,12,2],hint:"Представь 5 как смешанное число: 5 = 4 12/12.",sol:()=>'4 '+F(12,12)+' − 2 '+F(7,12)+' = <b>2 '+F(5,12)+'</b>'},
+ {q:()=>'4 '+F(1,2)+' − 1 '+F(3,4)+' + 2 '+F(5,8)+' = ?',mode:"mixed",ans:[3,8,5],hint:"Действия по порядку. Удобно привести всё к знаменателю 8.",sol:()=>'4 '+F(4,8)+' − 1 '+F(6,8)+' = 3 '+F(12,8)+' − 1 '+F(6,8)+' = 2 '+F(6,8)+'; <br>2 '+F(6,8)+' + 2 '+F(5,8)+' = 4 '+F(11,8)+' = <b>5 '+F(3,8)+'</b>'},
+ {q:()=>'9 − (3 '+F(5,6)+' + 2 '+F(3,4)+') = ?',mode:"mixed",ans:[5,12,2],hint:"Сначала скобки, потом вычитание из целого числа.",sol:()=>'3 '+F(10,12)+' + 2 '+F(9,12)+' = 5 '+F(19,12)+' = 6 '+F(7,12)+';<br>9 − 6 '+F(7,12)+' = 8 '+F(12,12)+' − 6 '+F(7,12)+' = <b>2 '+F(5,12)+'</b>'},
+ {q:()=>'ЗАДАЧА 1. В пакете было '+F(7,8)+' кг яблок и '+F(5,6)+' кг груш. Сколько всего килограммов фруктов в пакете? (ответ дробью)',mode:"frac",ans:[41,24,0],hint:"Сложи две дроби. НОЗ = 24.",sol:()=>F(7,8)+' + '+F(5,6)+' = '+F(21,24)+' + '+F(20,24)+' = <b>'+F(41,24)+' кг</b>'},
+ {q:()=>'ЗАДАЧА 2. Туристы прошли в первый час '+F(3,10)+' маршрута, во второй — '+F(2,15)+' маршрута. Сравни: какая часть маршрута больше — пройденная или оставшаяся?',mode:"choice",ans:1,vars:["Пройденная больше", "Оставшаяся больше", "Они равны"],hint:"Сначала найди пройденную часть, потом оставшуюся (весь маршрут = 1) — и сравни.",sol:()=>'1) Пройдено: '+F(3,10)+' + '+F(2,15)+' = '+F(9,30)+' + '+F(4,30)+' = '+F(13,30)+'.<br>2) Осталось: 1 − '+F(13,30)+' = '+F(17,30)+'.<br>3) '+F(13,30)+' &lt; '+F(17,30)+' → <b>оставшаяся часть больше</b>.'}
+];
+
+/* ===== ЗВУК (WebAudio) ===== */
+let AC=null;
+function beep(ok){
+  try{
+    AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+    const o=AC.createOscillator(), g=AC.createGain();
+    o.connect(g); g.connect(AC.destination);
+    if(ok){ o.frequency.setValueAtTime(660,AC.currentTime); o.frequency.setValueAtTime(880,AC.currentTime+0.12); }
+    else { o.frequency.setValueAtTime(220,AC.currentTime); }
+    g.gain.setValueAtTime(0.18,AC.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,AC.currentTime+(ok?0.35:0.25));
+    o.start(); o.stop(AC.currentTime+(ok?0.36:0.26));
+  }catch(e){}
+}
+/* ===== ФЕЕРВЕРК ИЗ ЗВЁЗД ===== */
+const FWC=document.getElementById('fwcanvas'), FX=FWC.getContext('2d');
+let fwAnim=null, parts=[];
+const FW_COLORS=['#00ADE3','#8FD2EC','#FFC24B','#FF4D6D','#7ED957'];
+function star(ctx,x,y,r,rot,color){
+  ctx.save();ctx.translate(x,y);ctx.rotate(rot);ctx.fillStyle=color;ctx.beginPath();
+  for(let i=0;i<5;i++){ctx.lineTo(Math.cos(i*4*Math.PI/5)*r,Math.sin(i*4*Math.PI/5)*r);
+    ctx.lineTo(Math.cos((i*4+2)*Math.PI/5)*r*0.45,Math.sin((i*4+2)*Math.PI/5)*r*0.45);}
+  ctx.closePath();ctx.fill();ctx.restore();
+}
+function fireworks(big){
+  FWC.width=innerWidth;FWC.height=innerHeight;FWC.style.display='block';
+  const n=big?90:28;
+  for(let k=0;k<(big?3:1);k++){
+    const bx=innerWidth*(0.25+Math.random()*0.5), by=innerHeight*(0.25+Math.random()*0.35);
+    for(let i=0;i<n/(big?3:1);i++){
+      const a=Math.random()*2*Math.PI, sp=2+Math.random()*(big?6:4);
+      parts.push({x:bx,y:by,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-1.5,r:4+Math.random()*6,
+        rot:Math.random()*6,vr:(Math.random()-0.5)*0.2,life:1,decay:0.008+Math.random()*0.01,
+        c:FW_COLORS[Math.floor(Math.random()*FW_COLORS.length)]});
+    }
+  }
+  if(fwAnim)cancelAnimationFrame(fwAnim);
+  (function loop(){
+    FX.clearRect(0,0,FWC.width,FWC.height);
+    parts=parts.filter(p=>p.life>0);
+    for(const p of parts){
+      p.x+=p.vx;p.y+=p.vy;p.vy+=0.08;p.rot+=p.vr;p.life-=p.decay;
+      FX.globalAlpha=Math.max(p.life,0);
+      star(FX,p.x,p.y,p.r,p.rot,p.c);
+    }
+    FX.globalAlpha=1;
+    if(parts.length){fwAnim=requestAnimationFrame(loop);}
+    else{FWC.style.display='none';}
+  })();
+}
+
+let cur=0, right=0; const userAns=new Array(TASKS.length).fill(null);
+const $=id=>document.getElementById(id);
+
+function start(){ $('screen-start').style.display='none'; $('screen-result').style.display='none';
+  $('screen-task').style.display='block'; render(); }
+
+function cell(id,w){ return `<input type="text" class="cell${w?' wide':''}" id="${id}" inputmode="numeric" autocomplete="off" onkeydown="if(event.key==='Enter')answerInput()">`; }
+
+function render(){
+  const t=TASKS[cur];
+  $('bar').style.width=(cur/TASKS.length*100)+'%';
+  $('tnum').textContent=`Задание ${cur+1} из ${TASKS.length}`;
+  let h=`<div class="qtext">${t.q()}</div>`;
+  if(t.mode==='choice'){
+    h+='<div class="variants">'+t.vars.map((v,i)=>`<button class="var-btn" onclick="answerChoice(${i},this)">${v}</button>`).join('')+'</div>';
+    h+='<div class="feedback" id="fb"></div>';
+  } else if(t.mode==='frac'){
+    h+=`<div class="ansrow"><b>Ответ:</b>
+      <span class="frin">${cell('in_n')}<span class="fbar"></span>${cell('in_d')}</span>
+      <button class="btn" onclick="answerInput()">Проверить</button></div>`;
+    h+='<div class="feedback" id="fb"></div>';
+  } else { // mixed
+    h+=`<div class="ansrow"><b>Ответ:</b>
+      ${cell('in_w',true)}
+      <span class="frin">${cell('in_n')}<span class="fbar"></span>${cell('in_d')}</span>
+      <button class="btn" onclick="answerInput()">Проверить</button></div>`;
+    h+='<div class="feedback" id="fb"></div>';
+  }
+  h+='<div style="margin-top:12px"><button class="btn" id="nextbtn" style="display:none" onclick="next()">Далее</button></div>';
+  $('tbody').innerHTML=h;
+  $('algbox').style.display='none';
+  $('taskhint').innerHTML=`<b>Подсказка к этому заданию:</b> ${t.hint}`;
+  const f=$('in_n'); if(f) f.focus();
+}
+function toggleAlg(){const a=$('algbox');a.style.display=a.style.display==='none'?'block':'none';}
+
+function answerChoice(i,btn){
+  const t=TASKS[cur], fb=$('fb');
+  if(i===t.ans){ btn.classList.add('sel-ok'); userAns[cur]=true; right++;
+    fb.textContent='Верно!'; fb.className='feedback good'; beep(true); fireworks(false); lockAndNext(); }
+  else { btn.classList.add('sel-err'); userAns[cur]=userAns[cur]||false;
+    fb.textContent='Неверно — попробуй ещё раз.'; fb.className='feedback bad'; }
+}
+
+function answerInput(){
+  const t=TASKS[cur], fb=$('fb');
+  const n=parseInt(($('in_n').value||'').trim(),10);
+  const d=parseInt(($('in_d').value||'').trim(),10);
+  const w=$('in_w') ? parseInt(($('in_w').value||'').trim(),10) : (t.ans[2]||0);
+  const inputs = $('in_w') ? [$('in_w'),$('in_n'),$('in_d')] : [$('in_n'),$('in_d')];
+  if(isNaN(n)||isNaN(d)||($('in_w')&&isNaN(w))){
+    fb.textContent='Заполни все ячейки числами.'; fb.className='feedback bad'; return; }
+  if(d===0){ fb.textContent='Знаменатель не может быть 0.'; fb.className='feedback bad'; return; }
+  const [an,ad,aw]=t.ans;
+  const ok = (n===an && d===ad && w===aw);
+  if(ok){ inputs.forEach(i=>{i.className='cell ok';i.disabled=true;}); userAns[cur]=true; right++;
+    fb.textContent='Верно!'; fb.className='feedback good'; beep(true); fireworks(false); lockAndNext(); }
+  else { inputs.forEach(i=>i.className='cell err'); userAns[cur]=userAns[cur]||false;
+    if($('in_w')&&t.ans[2]===0&&w!==0){ /* frac ответ с лишней целой частью */ }
+    if(!ok && n*ad===an*d && w===aw && an*1.0/ad!==n/d){}
+    if(n!==an||d!==ad){
+      // проверим, не сократимая ли ошибка
+      const g=gcd(Math.abs(n),Math.abs(d));
+      if(g>1 && n/g===an && d/g===ad && w===aw){
+        fb.textContent='Почти! Дробь нужно сократить — ответ только несократимой дробью.';
+      } else if($('in_w')&&t.ans[2]>0&&n>=d){
+        fb.textContent='Дробная часть неправильная — выдели из неё целую часть!';
+      } else {
+        fb.textContent='Неверно — исправь и проверь снова.';
+      }
+    } else { fb.textContent='Неверно — исправь и проверь снова.'; }
+    fb.className='feedback bad';
+  }
+}
+function gcd(a,b){ a=Math.abs(a);b=Math.abs(b); while(b){[a,b]=[b,a%b];} return a||1; }
+
+function lockAndNext(){
+  document.querySelectorAll('.var-btn').forEach(b=>b.disabled=true);
+  $('nextbtn').style.display='inline-block';
+  if(cur===TASKS.length-1) $('nextbtn').textContent='К результату';
+}
+function next(){ cur++; if(cur<TASKS.length) render(); else showResult(); }
+
+function showResult(){
+  $('screen-task').style.display='none'; $('screen-result').style.display='block';
+  $('score').textContent=`${right} из ${TASKS.length}`;
+  $('verdict').innerHTML = right===TASKS.length
+    ? '<span style="color:#43a047"><b>Все задания выполнены верно. Отличная работа!</b></span>'
+    : '<span style="color:#e53935"><b>Есть ошибки — разбор ниже.</b></span>';
+  beep(true); fireworks(true); setTimeout(()=>fireworks(true),900);
+  let m='';
+  TASKS.forEach((t,i)=>{ if(userAns[i]!==true){
+    m+=`<div style="margin:8px 0;padding:10px 14px;background:#fff5f5;border-left:4px solid #e53935;border-radius:0 8px 8px 0">
+      <b>Задание ${i+1}:</b> ${t.q()}<br><b>Разбор:</b> ${t.sol()}</div>`;}});
+  $('mistakes').innerHTML = m ? '<h3 style="color:#e53935">Ошибки и разбор:</h3>'+m : '';
+  let s='<h3>Все ответы и решения:</h3><ol>';
+  TASKS.forEach(t=>{ s+=`<li style="margin-bottom:10px">${t.q()}<br>${t.sol()}</li>`;});
+  $('solutions').innerHTML=s+'</ol>';
+}
+function toggleSol(){const a=$('solutions');a.style.display=a.style.display==='none'?'block':'none';
+  $('solbtn').textContent=a.style.display==='none'?'Показать решения и ответы':'Скрыть решения';}
+</script>
+</body>
+</html>
