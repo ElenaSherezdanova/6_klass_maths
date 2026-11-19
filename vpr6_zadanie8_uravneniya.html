@@ -3,163 +3,306 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ВПР 6 класс. Задание 8: линейные уравнения — тренажёр</title>
+<title>Тренажёр: Линейные уравнения — 6 класс</title>
 <style>
   :root{
-    --ink:#1d3557; --accent:#e63946; --paper:#fffdf7; --line:#e3dccb;
-    --soft:#f4efe3; --ok:#2a9d8f;
+    --blue:#0CA0E3; --pink:#E0418F; --green:#8ABD30; --olive:#AAC823;
+    --lblue:#D2E2FC; --lgreen:#C9E4BB; --gray:#898989; --white:#FEFEFE;
+    --dark:#1c2b3a;
   }
-  *{box-sizing:border-box}
+  *{box-sizing:border-box; margin:0; padding:0;}
   body{
-    margin:0; padding:16px; background:var(--soft);
-    font-family:Georgia,'Times New Roman',serif; color:var(--ink);
-    line-height:1.55;
+    font-family:'Gilroy','Trebuchet MS','Segoe UI',Arial,sans-serif;
+    background:linear-gradient(160deg,#ffffff 0%, #eaf6fd 55%, #fbeef5 100%);
+    color:var(--dark); min-height:100vh; padding:18px 14px 60px;
   }
-  .wrap{max-width:720px; margin:0 auto}
-  header{
-    background:var(--paper); border:2px solid var(--ink); border-radius:12px;
-    padding:20px 22px; margin-bottom:18px;
+  .wrap{max-width:640px; margin:0 auto;}
+  .screen{display:none; animation:fadein .35s ease;}
+  .screen.active{display:block;}
+  @keyframes fadein{from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:none;}}
+
+  .badge{
+    display:inline-block; background:var(--pink); color:#fff; font-weight:800;
+    font-size:13px; letter-spacing:.08em; padding:7px 16px; border-radius:999px;
+    text-transform:uppercase; margin-bottom:14px;
   }
-  h1{font-size:1.5em; margin:0 0 6px}
-  .tag{
-    display:inline-block; background:var(--accent); color:#fff;
-    font-family:Arial,sans-serif; font-size:.75em; font-weight:bold;
-    padding:3px 10px; border-radius:20px; letter-spacing:.5px;
+  .badge.blue{background:var(--blue);}
+  .badge.green{background:var(--green);}
+
+  .card{
+    background:#fff; border-radius:22px; padding:26px 22px;
+    box-shadow:0 8px 28px rgba(12,160,227,.13); margin-bottom:16px;
   }
-  .sub{font-family:Arial,sans-serif; font-size:.92em; color:#555}
-  section{
-    background:var(--paper); border:1px solid var(--line); border-radius:12px;
-    padding:18px 22px; margin-bottom:18px;
-  }
-  h2{font-size:1.15em; margin:0 0 12px; border-bottom:2px solid var(--accent);
-     display:inline-block; padding-bottom:3px}
-  .eq{
-    font-size:1.35em; text-align:center; background:#fdf3e7;
-    border:2px dashed var(--accent); border-radius:10px; padding:14px; margin:10px 0;
-  }
-  .step{margin:10px 0}
-  .step b{color:var(--accent)}
-  .trap{
-    background:#fdecec; border-left:4px solid var(--accent);
-    padding:8px 12px; border-radius:0 8px 8px 0; margin:10px 0;
-    font-family:Arial,sans-serif; font-size:.92em;
-  }
-  .task{
-    border:1px solid var(--line); border-radius:10px;
-    padding:12px 14px; margin:10px 0; background:#fff;
-  }
-  .lvl{font-family:Arial,sans-serif; font-weight:bold; font-size:.8em;
-    color:#fff; background:var(--ink); padding:2px 10px; border-radius:14px;
-    margin-right:8px}
-  .lvl.b{background:#b0713a} .lvl.v{background:var(--accent)}
-  .task .eq{font-size:1.2em; background:transparent; border:none; padding:6px 0; margin:4px 0}
-  details{
-    margin-top:6px; font-family:Arial,sans-serif; font-size:.95em;
-  }
-  summary{
-    cursor:pointer; color:var(--accent); font-weight:bold; user-select:none;
-  }
-  details .ans{
-    margin-top:6px; padding:6px 10px; background:#eef7f5;
-    border-radius:8px; display:inline-block; border:1px solid var(--ok);
-  }
+  h1{font-size:30px; line-height:1.15; font-weight:800; margin-bottom:10px;}
+  h1 .hl{color:var(--blue);}
+  h2{font-size:22px; font-weight:800; margin-bottom:12px;}
+  p.lead{font-size:16px; color:#3d4d5c; line-height:1.5;}
+
   .btn{
-    display:block; text-align:center; background:var(--ink); color:#fff !important;
-    font-family:Arial,sans-serif; font-weight:bold; text-decoration:none;
-    padding:14px; border-radius:12px; margin:20px 0;
+    display:block; width:100%; border:none; cursor:pointer; text-align:center;
+    font-family:inherit; font-weight:800; font-size:17px; padding:15px 18px;
+    border-radius:14px; color:#fff; background:var(--blue);
+    box-shadow:0 4px 0 #0881b8; transition:transform .08s;
   }
-  .btn:hover{background:#16324f}
-  footer{font-family:Arial,sans-serif; font-size:.8em; color:#888; text-align:center}
-  @media print{
-    body{background:#fff; padding:0}
-    .btn{display:none}
-    details{display:block}
-    details .ans{display:inline-block !important}
-    section{border:none; page-break-inside:avoid}
+  .btn:active{transform:translateY(3px); box-shadow:0 1px 0 #0881b8;}
+  .btn.pink{background:var(--pink); box-shadow:0 4px 0 #b92f70;}
+  .btn.green{background:var(--green); box-shadow:0 4px 0 #6d9622;}
+  .btn.ghost{background:#fff; color:var(--blue); border:2px solid var(--blue); box-shadow:none;}
+  .btn + .btn{margin-top:10px;}
+
+  .progress{
+    display:flex; align-items:center; gap:10px; margin-bottom:14px;
+    font-size:13px; font-weight:700; color:var(--gray);
   }
+  .bar{flex:1; height:10px; background:#e6eef4; border-radius:999px; overflow:hidden;}
+  .bar i{display:block; height:100%; width:0%; background:linear-gradient(90deg,var(--blue),var(--green));
+    border-radius:999px; transition:width .4s ease;}
+
+  .eq{
+    font-size:24px; font-weight:800; text-align:center; letter-spacing:.02em;
+    background:var(--lblue); border:2px dashed var(--blue); border-radius:16px;
+    padding:18px 10px; margin:14px 0;
+  }
+  .eq b{color:var(--blue);}
+
+  .steps{margin:12px 0;}
+  .step{display:flex; gap:10px; margin-bottom:10px; font-size:15px; line-height:1.45;}
+  .step .n{
+    flex:none; width:26px; height:26px; border-radius:50%; background:var(--blue);
+    color:#fff; font-weight:800; font-size:14px; display:flex; align-items:center; justify-content:center;
+  }
+  .step code{font-weight:700; color:var(--dark);}
+
+  .trap{
+    background:#fdeef4; border-left:4px solid var(--pink); border-radius:0 12px 12px 0;
+    padding:10px 12px; font-size:14px; line-height:1.45; margin:10px 0;
+  }
+  .trap b{color:var(--pink);}
+
+  .answer-row{display:flex; gap:10px; margin:14px 0;}
+  .answer-row input{
+    flex:1; font-family:inherit; font-size:20px; font-weight:800; text-align:center;
+    padding:12px; border:2px solid var(--lblue); border-radius:12px; outline:none; color:var(--dark);
+  }
+  .answer-row input:focus{border-color:var(--blue);}
+  .answer-row button{width:130px; flex:none;}
+
+  .fb{border-radius:12px; padding:12px 14px; font-size:14.5px; line-height:1.45; display:none; margin-top:12px;}
+  .fb.ok{display:block; background:var(--lgreen); border-left:4px solid var(--green);}
+  .fb.no{display:block; background:#fdeef4; border-left:4px solid var(--pink);}
+  .fb b{font-weight:800;}
+
+  .check-sol{
+    font-family:'Courier New',monospace; background:#f4f8fb; border-radius:12px;
+    padding:12px; font-size:15px; margin-top:10px; display:none; white-space:pre-line;
+  }
+
+  .scorebig{font-size:54px; font-weight:800; color:var(--blue); margin:6px 0 2px;}
+  .stars{font-size:26px; margin-bottom:8px;}
+
+  .solsol{display:none; margin-top:12px; text-align:left;}
+  .solrow{
+    background:#f4f8fb; border-radius:12px; padding:10px 12px; margin-bottom:8px;
+    font-size:14.5px; line-height:1.5;
+  }
+  .solrow b{color:var(--blue);}
+
+  .foot{
+    text-align:center; color:var(--gray); font-size:12.5px; margin-top:26px; line-height:1.6;
+  }
+  .foot b{color:var(--dark);}
+  .heart{color:var(--pink);}
 </style>
 </head>
 <body>
 <div class="wrap">
 
-<header>
-  <span class="tag">ВПР · 6 КЛАСС · ЗАДАНИЕ 8</span>
-  <h1>Линейные уравнения: тренажёр</h1>
-  <p class="sub">Три ловушки задания 8 — минус перед скобкой, знак при переносе, минус в ответе.
-  Решайте по шагам, ответы скрыты. При печати лист готов к использованию.</p>
-</header>
+  <!-- ЭКРАН 1: ТИТУЛ -->
+  <section class="screen active" id="scr-title">
+    <div class="card">
+      <span class="badge">ВПР · 6 класс · Задание 8</span>
+      <h1>Линейные <span class="hl">уравнения</span></h1>
+      <p class="lead">
+        10 заданий: раскрываем скобки, переносим, не теряем минусы.
+        Три ловушки задания 8 — внутри разбора. Ответ вписывай сам — как в тетради.
+      </p>
+      <div class="eq">1 − 2(5 + 3x) = 15</div>
+      <button class="btn" onclick="go('scr-alg')">Начать</button>
+      <p class="foot">© Елена Шерезданова · Математика 5–11 класс</p>
+    </div>
+  </section>
 
-<section>
-  <h2>Разбор-образец</h2>
-  <div class="eq">1 − 2(5 + 3x) = 15</div>
-  <div class="step"><b>Шаг 1.</b> Минус перед скобкой умножаем на всё внутри: знаки меняются оба.
-  <br>1 − 10 − 6x = 15</div>
-  <div class="trap">⚠ Ловушка №1: часто пишут −10 <b>+6x</b> — минус «забыли» на втором слагаемом.</div>
-  <div class="step"><b>Шаг 2.</b> Приводим подобные: −9 − 6x = 15</div>
-  <div class="step"><b>Шаг 3.</b> Переносим −9 вправо, знак меняется: −6x = 15 + 9 = 24</div>
-  <div class="trap">⚠ Ловушка №2: при переносе знак не сменили — типичная ошибка.</div>
-  <div class="step"><b>Шаг 4.</b> x = 24 : (−6) = <b>−4</b></div>
-  <div class="trap">⚠ Ловушка №3: минус в ответе — часть ответа, без него балл в ноль.
-  Проверка: 1 − 2(5 + 3·(−4)) = 1 − 2·(−7) = 15 ✓</div>
-</section>
+  <!-- ЭКРАН 2: АЛГОРИТМ -->
+  <section class="screen" id="scr-alg">
+    <div class="card">
+      <span class="badge blue">Алгоритм · Как решать</span>
+      <h2>Линейное уравнение за 4 шага</h2>
+      <div class="steps">
+        <div class="step"><span class="n">1</span><div>Раскрыть скобки. Минус перед скобкой меняет <code>все</code> знаки внутри.</div></div>
+        <div class="step"><span class="n">2</span><div>Привести подобные: слева <code>x</code>, справа числа.</div></div>
+        <div class="step"><span class="n">3</span><div>Перенести числа вправо, меняя знак на противоположный.</div></div>
+        <div class="step"><span class="n">4</span><div>Разделить обе части на коэффициент при <code>x</code>. Сделать проверку!</div></div>
+      </div>
+      <div class="trap">⚠ <b>Ловушка №1.</b> −2(5 + 3x) = −10 <b>− 6x</b> — минус действует на оба слагаемых.</div>
+      <div class="trap">⚠ <b>Ловушка №2.</b> При переносе через «=» знак меняется: −9 → <b>+9</b>.</div>
+      <div class="trap">⚠ <b>Ловушка №3.</b> Минус в ответе — часть ответа. x = −4, а не 4!</div>
+      <button class="btn green" onclick="go('scr-task', true)">К заданиям →</button>
+      <p class="foot">© Елена Шерезданова · Математика 5–11 класс</p>
+    </div>
+  </section>
 
-<section>
-  <h2>Блок А — разминка</h2>
-  <div class="task"><span class="lvl">А1</span>
-    <div class="eq">2 − 3(x + 4) = 5</div>
-    <details><summary>ответ</summary><span class="ans">x = −5</span></details>
-  </div>
-  <div class="task"><span class="lvl">А2</span>
-    <div class="eq">10 − 4(x − 2) = 6</div>
-    <details><summary>ответ</summary><span class="ans">x = 3</span></details>
-  </div>
-  <div class="task"><span class="lvl">А3</span>
-    <div class="eq">5 − 2(2x + 1) = 11</div>
-    <details><summary>ответ</summary><span class="ans">x = −2</span></details>
-  </div>
-</section>
+  <!-- ЭКРАН 3: ЗАДАНИЯ -->
+  <section class="screen" id="scr-task">
+    <div class="progress"><span id="prog-text">Задание 1 из 10</span><div class="bar"><i id="prog-bar"></i></div></div>
+    <div class="card">
+      <span class="badge green" id="task-tag">Задание 1</span>
+      <div class="eq" id="task-eq">—</div>
+      <div class="answer-row">
+        <input type="text" id="task-in" placeholder="x = ?" autocomplete="off">
+        <button class="btn" onclick="check()">Проверить</button>
+      </div>
+      <div class="fb" id="task-fb"></div>
+      <div class="check-sol" id="task-sol"></div>
+      <button class="btn green" id="btn-next" style="display:none" onclick="next()">Дальше →</button>
+      <p class="foot">© Елена Шерезданова · Математика 5–11 класс</p>
+    </div>
+  </section>
 
-<section>
-  <h2>Блок Б — средний уровень</h2>
-  <div class="task"><span class="lvl">Б1</span>
-    <div class="eq">7 − 2(3x − 4) = −9</div>
-    <details><summary>ответ</summary><span class="ans">x = 5</span></details>
-  </div>
-  <div class="task"><span class="lvl">Б2</span>
-    <div class="eq">4 − 5(2x + 3) = 24</div>
-    <details><summary>ответ</summary><span class="ans">x = −3,5</span></details>
-  </div>
-  <div class="task"><span class="lvl">Б3</span>
-    <div class="eq">3(x + 2) − 4(1 − x) = 12</div>
-    <details><summary>ответ</summary><span class="ans">x = 2</span></details>
-  </div>
-  <div class="task"><span class="lvl">Б4</span>
-    <div class="eq">6 − 3(x − 5) = −3x + 12</div>
-    <details><summary>ответ</summary><span class="ans">x = −1</span></details>
-  </div>
-</section>
+  <!-- ЭКРАН 4: РЕЗУЛЬТАТ -->
+  <section class="screen" id="scr-res">
+    <div class="card" style="text-align:center">
+      <span class="badge blue">Результат</span>
+      <div class="scorebig" id="res-score">0 / 10</div>
+      <div class="stars" id="res-stars">☆☆☆</div>
+      <p class="lead" id="res-text"></p>
+      <button class="btn ghost" onclick="showSol()">Показать решения и ответы</button>
+      <div class="solsol" id="res-sols"></div>
+      <button class="btn" onclick="restart()">Пройти заново</button>
+      <a href="https://t.me/materials56" style="text-decoration:none"><button class="btn pink" style="width:100%; margin-top:10px;">Ещё материалы — в боте 🎁</button></a>
+      <p class="foot">© Елена Шерезданова · Математика 5–11 класс<br>Тренажёр создан с <span class="heart">♥</span> для шестиклассников</p>
+    </div>
+  </section>
 
-<section>
-  <h2>Блок В — как в задании 8</h2>
-  <div class="task"><span class="lvl">В1</span>
-    <div class="eq">9 − 2(4x + 3) − 2(1 − x) = 0</div>
-    <details><summary>ответ</summary><span class="ans">x = 0,5</span></details>
-  </div>
-  <div class="task"><span class="lvl">В2</span>
-    <div class="eq">2(3x − 1) − 5(x − 2) + 4 = 10 − 2(x + 1)</div>
-    <details><summary>ответ</summary><span class="ans">x = −2</span></details>
-  </div>
-  <div class="task"><span class="lvl">В3</span>
-    <div class="eq">12 − (2x + 5) − 3(1 − 2x) = 4x</div>
-    <details><summary>ответ</summary><span class="ans">x = 2</span></details>
-  </div>
-</section>
-
-<a class="btn" href="https://max.ru/se14620051_bot?start=materials56">
-  📥 Больше тренажёров — в боте
-</a>
-
-<footer>Шерезданова Елена · математика 5–11 класс · ВПР · ОГЭ</footer>
 </div>
+
+<script>
+// x — строка вида "-4" или "2"
+const TASKS = [
+  {eq:"1 − 2(5 + 3x) = 15", ans:"-4",
+   sol:"1 − 10 − 6x = 15\n−9 − 6x = 15\n−6x = 24\nx = −4\nПроверка: 1 − 2·(−7) = 15 ✓"},
+  {eq:"3(x − 2) = 12", ans:"6",
+   sol:"3x − 6 = 12\n3x = 18\nx = 6\nПроверка: 3·4 = 12 ✓"},
+  {eq:"5x + 4 = 2x − 8", ans:"-4",
+   sol:"5x − 2x = −8 − 4\n3x = −12\nx = −4\nПроверка: −16 = −16 ✓"},
+  {eq:"4 − 3(x + 2) = 7", ans:"-3",
+   sol:"4 − 3x − 6 = 7\n−2 − 3x = 7\n−3x = 9\nx = −3\nПроверка: 4 − 3·(−1) = 7 ✓"},
+  {eq:"7x = 3x + 16", ans:"4",
+   sol:"7x − 3x = 16\n4x = 16\nx = 4\nПроверка: 28 = 12 + 16 ✓"},
+  {eq:"2(x + 5) − 3x = 1", ans:"9",
+   sol:"2x + 10 − 3x = 1\n−x + 10 = 1\n−x = −9\nx = 9\nПроверка: 28 − 27 = 1 ✓"},
+  {eq:"6 − 2(3 − x) = 0", ans:"0",
+   sol:"6 − 6 + 2x = 0\n2x = 0\nx = 0\nПроверка: 6 − 6 = 0 ✓"},
+  {eq:"8x − 12 = 4x + 4", ans:"4",
+   sol:"8x − 4x = 4 + 12\n4x = 16\nx = 4\nПроверка: 20 = 20 ✓"},
+  {eq:"10 − (2x + 1) = 3", ans:"3",
+   sol:"10 − 2x − 1 = 3\n9 − 2x = 3\n−2x = −6\nx = 3\nПроверка: 10 − 7 = 3 ✓"},
+  {eq:"−(x + 4) = 2x − 13", ans:"3",
+   sol:"−x − 4 = 2x − 13\n−3x = −9\nx = 3\nПроверка: −7 = 6 − 13 = −7 ✓"}
+];
+
+let idx = 0, okCount = 0, results = [];
+
+function go(id, fresh){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(fresh) showTask(0);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function showTask(i){
+  idx = i;
+  const t = TASKS[i];
+  document.getElementById('prog-text').textContent = "Задание " + (i+1) + " из " + TASKS.length;
+  document.getElementById('prog-bar').style.width = (i/TASKS.length*100) + "%";
+  document.getElementById('task-tag').textContent = "Задание " + (i+1);
+  document.getElementById('task-eq').textContent = t.eq;
+  const inp = document.getElementById('task-in');
+  inp.value = ""; inp.disabled = false; inp.style.borderColor = "";
+  inp.focus();
+  document.getElementById('task-fb').className = "fb";
+  document.getElementById('task-fb').style.display = "none";
+  document.getElementById('task-sol').style.display = "none";
+  document.getElementById('btn-next').style.display = "none";
+}
+
+function norm(s){
+  s = s.trim().replace(/\s+/g,'').replace('−','-').replace('х','x').replace('Х','x');
+  s = s.replace(/^x=/i,'');
+  return s;
+}
+
+function check(){
+  const t = TASKS[idx];
+  const inp = document.getElementById('task-in');
+  const fb = document.getElementById('task-fb');
+  const sol = document.getElementById('task-sol');
+  const user = norm(inp.value);
+  if(user === "") { inp.style.borderColor = "#E0418F"; return; }
+  const good = norm(t.ans) === user || (t.ans === "0" && (user === "0" || user === "0"));
+  inp.disabled = true;
+  if(good){
+    okCount++;
+    inp.style.borderColor = "#8ABD30";
+    fb.className = "fb ok";
+    fb.innerHTML = "<b>Верно! 🎉</b> Смотри, как это оформляется:";
+  } else {
+    inp.style.borderColor = "#E0418F";
+    fb.className = "fb no";
+    fb.innerHTML = "<b>Почти!</b> Правильный ответ: x = " + (t.ans === "0" ? "0" : t.ans) + ". Разберём:";
+  }
+  sol.textContent = t.sol;
+  sol.style.display = "block";
+  results[idx] = good;
+  document.getElementById('btn-next').style.display = "block";
+  document.getElementById('btn-next').textContent = (idx === TASKS.length - 1) ? "К результату →" : "Дальше →";
+}
+
+function next(){
+  document.getElementById('prog-bar').style.width = ((idx+1)/TASKS.length*100) + "%";
+  if(idx === TASKS.length - 1) showResult();
+  else showTask(idx + 1);
+}
+
+function showResult(){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('scr-res').classList.add('active');
+  document.getElementById('res-score').textContent = okCount + " / " + TASKS.length;
+  const stars = okCount >= 9 ? "⭐⭐⭐" : okCount >= 6 ? "⭐⭐" : okCount >= 3 ? "⭐" : "☆";
+  document.getElementById('res-stars').textContent = stars;
+  let txt;
+  if(okCount === TASKS.length) txt = "Идеально! Все три ловушки тебе не страшны — на ВПР это гарантированный балл.";
+  else if(okCount >= 6) txt = "Хороший результат! Перечитай ловушки в начале — и будет 10 из 10.";
+  else txt = "Начало положено. Пройди ещё раз: ошибки — это то, что делает тренажёр полезным.";
+  document.getElementById('res-text').textContent = txt;
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function showSol(){
+  const box = document.getElementById('res-sols');
+  let html = "";
+  TASKS.forEach((t,i)=>{
+    html += "<div class='solrow'><b>Задание " + (i+1) + ".</b> " + t.eq.replace(/\n/g,'') +
+      " → x = " + (t.ans === "0" ? "0" : t.ans) +
+      (results[i] ? " ✓" : " ✗") + "<br>" + t.sol.replace(/\n/g,"<br>") + "</div>";
+  });
+  box.innerHTML = html;
+  box.style.display = "block";
+}
+
+function restart(){
+  okCount = 0; results = [];
+  go('scr-title');
+}
+</script>
 </body>
 </html>
